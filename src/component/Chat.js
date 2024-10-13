@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./ChatApp.css"; // CSS 파일 임포트
+import "../css/ChatApp.css"; // CSS 파일 임포트
 
-function Chat() {
+const Chat = () => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([
     { type: "system", content: "연결 대기 중..." },
@@ -58,7 +58,7 @@ function Chat() {
 
   const fetchConnectedUsers = () => {
     // 접속자 수를 가져오는 API 요청
-    fetch("http://localhost:8080/api/session")
+    fetch("/api/session")
       .then((response) => response.json())
       .then((data) => {
         setConnectedUsers(data);
@@ -68,7 +68,7 @@ function Chat() {
 
   const fetchWaitingUsers = () => {
     // 대기자 수를 가져오는 API 요청
-    fetch("http://localhost:8080/api/waiting")
+    fetch("/api/waiting")
       .then((response) => response.json())
       .then((data) => setWaitingUsers(data))
       .catch((error) => console.error("Error fetching waiting users:", error));
@@ -187,6 +187,6 @@ function Chat() {
       </div>
     </div>
   );
-}
+};
 
 export default Chat;

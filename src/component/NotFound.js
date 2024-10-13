@@ -1,8 +1,8 @@
 // src/components/NotFound.js
 import React from "react";
-import "./NotFound.css"; // CSS 파일 import
+import "../css/NotFound.css"; // CSS 파일 import
 
-function NotFound() {
+const NotFound = () => {
   return (
     <div className="not-found">
       <h1>404</h1>
@@ -13,6 +13,6 @@ function NotFound() {
       </a>
     </div>
   );
-}
+};
 
 export default NotFound;
