@@ -1,0 +1,40 @@
+/* src/components/NotFound.css */
+.not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* 화면의 전체 높이 */
+    text-align: center;
+    background-color: #f8d7da; /* 배경색 */
+    color: #721c24; /* 글자색 */
+    font-family: 'Arial', sans-serif; /* 폰트 설정 */
+}
+
+h1 {
+    font-size: 100px; /* 큰 글자 크기 */
+    margin: 0;
+}
+
+h2 {
+    font-size: 24px; /* 중간 글자 크기 */
+}
+
+p {
+    font-size: 18px; /* 일반 글자 크기 */
+    margin: 10px 0;
+}
+
+.home-link {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #721c24; /* 버튼 배경색 */
+    color: white; /* 버튼 글자색 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    transition: background-color 0.3s ease; /* 호버 시 부드러운 전환 효과 */
+}
+
+.home-link:hover {
+    background-color: #d63384; /* 호버 시 배경색 변화 */
+}
