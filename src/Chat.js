@@ -9,6 +9,7 @@ function Chat() {
   const [message, setMessage] = useState("");
   const [isSendDisabled, setIsSendDisabled] = useState(true);
   const chatWindowRef = useRef(null);
+  const messageInputRef = useRef(null);
   const [connectedUsers, setConnectedUsers] = useState(0); // 접속자 수
   const [waitingUsers, setWaitingUsers] = useState(0); // 대기자 수
 
@@ -74,13 +75,25 @@ function Chat() {
   };
 
   const displayMessage = (content, type) => {
-    let displayContent = content;
+    let displayContent;
+
+    // 줄바꿈 문자를 기준으로 메시지를 나눕니다.
+    const lines = content.split(/<br\s*\/?>/); // <br> 또는 <br />로 분할
+
+    // 각 줄을 <div>로 감싸서 배열을 만듭니다.
+    const messageElements = lines.map((line, index) => (
+      <div key={index}>{line || <br />}</div> // 빈 줄인 경우 <br /> 추가
+    ));
+
     if (type === "partner") {
       displayContent = (
         <>
-          <strong>상대방</strong> <br /> {content}
+          <strong>상대방</strong> <br />
+          {messageElements} {/* 줄바꿈이 포함된 메시지 */}
         </>
       );
+    } else {
+      displayContent = messageElements; // 사용자 메시지인 경우
     }
 
     setMessages((prevMessages) => [
@@ -96,15 +109,20 @@ function Chat() {
   };
 
   const sendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim()) return; // 메시지가 비어있으면 종료
 
-    displayMessage(message, "user");
+    // 줄바꿈을 <br />로 변환
+    const formattedMessage = message.replace(/\n/g, "<br />");
 
+    // 메시지 표시
+    displayMessage(formattedMessage, "user");
+
+    // 소켓이 존재하면 메시지 전송
     if (socket) {
-      socket.send(message);
+      socket.send(formattedMessage); // 변환된 메시지 전송
     }
 
-    setMessage("");
+    setMessage(""); // 입력창 비우기
   };
 
   const enableSend = () => {
@@ -121,35 +139,17 @@ function Chat() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      sendMessage();
+      // If Shift is not held down, send the message
+      if (!e.shiftKey) {
+        e.preventDefault(); // Enter 키를 누르면 기본적으로 textarea에서 새 줄이 생성됩니다. 이 줄바꿈 동작을 방지하기 위해 preventDefault 메서드를 호출합니다.
+        sendMessage(); // Call your send message function
+      }
+      // If Shift is held down, do nothing (allow the new line)
     }
   };
 
   const resetChat = () => {
     setMessages([]);
-  };
-
-  const handleButtonClick = () => {
-    fetch("http://localhost:8080/api/session")
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        console.log(await response.text());
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
-    fetch("http://localhost:8080/api/waiting")
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        console.log(await response.text());
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
   };
 
   return (
@@ -171,13 +171,15 @@ function Chat() {
         ))}
       </div>
       <div className="input-container">
-        <input
-          type="text"
+        <textarea
+          ref={messageInputRef}
           value={message}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder="메시지를 입력하세요"
           disabled={isSendDisabled}
+          rows={2}
+          style={{ resize: "none", width: "100%" }}
         />
         <button onClick={sendMessage} disabled={isSendDisabled}>
           전송

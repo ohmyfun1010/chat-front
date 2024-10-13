@@ -1,147 +1,144 @@
+/* 공통 스타일 */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-  }
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #3d3d3d;
-    color: white;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #3d3d3d;
+  color: white;
+}
 
-  .user-info {
-    font-size: 16px;
-  }
+.user-info {
+  font-size: 16px;
+}
 
-  .reset-button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: rgb(41, 41, 41);
-    cursor: pointer;
-  }
-  
+.reset-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: rgb(41, 41, 41);
+  cursor: pointer;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: calc(100vh - 40px); /* 상하 여백 20px씩 빼기 */
+  max-width: 600px;
+  margin: 20px auto; /* 상하 20px, 좌우는 중앙 정렬을 유지하기 위해 auto */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.chat-window {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #bdd1ec;
+  display: flex; /* Flexbox를 사용하여 정렬 */
+  flex-direction: column; /* 자식 요소들을 세로 방향으로 정렬 */
+  align-items: center; /* 수평 가운데 정렬 */
+}
+
+.message {
+  margin-bottom: 20px;  /* 각 메시지 간의 여백 */
+  padding: 10px;
+  border-radius: 15px;
+  max-width: 80%;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.message.system {
+  text-align: center; /* 시스템 메시지 가운데 정렬 */
+  background-color: #eeeeee; /* 시스템 메시지 배경색 */
+}
+
+.message.user {
+  align-self: flex-end; /* 사용자 메시지 오른쪽 정렬 */
+  background-color: #fcff5a; /* 사용자 메시지 배경색 */
+}
+
+.message.partner {
+  align-self: flex-start; /* 상대방 메시지 왼쪽 정렬 */
+  background-color: #ffffff; /* 상대방 메시지 배경색 */
+  text-align: left; /* 상대방 메시지 왼쪽 정렬 */
+}
+
+.message.sent {
+  background-color: #e1ffc7;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.message.received {
+  background-color: #dcdcdc;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.input-container {
+  display: flex;
+  padding: 10px;
+  background-color: #ffffff;
+  border-top: 1px solid #ccc;
+}
+
+textarea {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  font-size: 16px;
+  resize: none; /* 사용자가 크기 조절하지 못하도록 설정 */
+}
+
+button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 600px) {
   .chat-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     width: 100%;
-    height: calc(100vh - 40px); /* 상하 여백 20px씩 빼기 */
-    max-width: 600px;
-    margin: 20px auto; /* 상하 20px, 좌우는 중앙 정렬을 유지하기 위해 auto */
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100vh;
   }
-  
-  .chat-window {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    background-color: #bdd1ec;
-    display: flex; /* Flexbox를 사용하여 정렬 */
-    flex-direction: column; /* 자식 요소들을 세로 방향으로 정렬 */
-    align-items: center; /* 수평 가운데 정렬 */
-  }
-  
+
   .message {
-    margin-bottom: 20px;  /* 각 메시지 간의 여백 */
-    padding: 10px;
-    border-radius: 15px;
-    max-width: 80%;
-    line-height: 1.4;
-    word-wrap: break-word;
+    font-size: 14px;
   }
-  
-  .message.system {
-    text-align: center; /* 시스템 메시지 가운데 정렬 */
-    background-color: #eeeeee; /* 시스템 메시지 배경색 */
+
+  textarea {
+    font-size: 14px;
   }
-  
-  .message.user {
-    align-self: flex-end; /* 사용자 메시지 오른쪽 정렬 */
-    background-color: #fcff5a; /* 사용자 메시지 배경색 */
-  }
-  
-  .message.partner {
-    align-self: flex-start; /* 상대방 메시지 왼쪽 정렬 */
-    background-color: #ffffff; /* 상대방 메시지 배경색 */
-    text-align: left; /* 상대방 메시지 왼쪽 정렬 */
-  }
-  
-  .message.sent {
-    background-color: #e1ffc7;
-    align-self: flex-end;
-    text-align: right;
-  }
-  
-  .message.received {
-    background-color: #dcdcdc;
-    align-self: flex-start;
-    text-align: left;
-  }
-  
-  .input-container {
-    display: flex;
-    padding: 10px;
-    background-color: #ffffff;
-    border-top: 1px solid #ccc;
-  }
-  
-  input[type="text"] {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    outline: none;
-    font-size: 16px;
-  }
-  
-  input[type="text"]:focus {
-    border-color: #007bff;
-  }
-  
+
   button {
-    margin-left: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
   }
-  
-  button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  /* 반응형 디자인 */
-  @media (max-width: 600px) {
-    .chat-container {
-      width: 100%;
-      height: 100vh;
-    }
-  
-    .message {
-      font-size: 14px;
-    }
-  
-    input[type="text"] {
-      font-size: 14px;
-    }
-  
-    button {
-      font-size: 14px;
-    }
-  }
-  
+}
