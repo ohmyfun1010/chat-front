@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { callApi, wsApi } from "../common/commonFunction";
 import "../css/ChatApp.css"; // CSS 파일 임포트
 
 const Chat = () => {
@@ -14,7 +15,7 @@ const Chat = () => {
   const [waitingUsers, setWaitingUsers] = useState(0); // 대기자 수
 
   useEffect(() => {
-    const newSocket = new WebSocket("ws://localhost:8080/api/chat");
+    const newSocket = new WebSocket(wsApi());
     setSocket(newSocket);
 
     newSocket.onmessage = (event) => {
@@ -56,22 +57,16 @@ const Chat = () => {
     };
   }, []);
 
-  const fetchConnectedUsers = () => {
+  const fetchConnectedUsers = async () => {
     // 접속자 수를 가져오는 API 요청
-    fetch("/api/session")
-      .then((response) => response.json())
-      .then((data) => {
-        setConnectedUsers(data);
-      })
-      .catch((error) => console.error("connected users-ip-number", error));
+    const session = await callApi("/api/session");
+    setConnectedUsers(session);
   };
 
-  const fetchWaitingUsers = () => {
+  const fetchWaitingUsers = async () => {
     // 대기자 수를 가져오는 API 요청
-    fetch("/api/waiting")
-      .then((response) => response.json())
-      .then((data) => setWaitingUsers(data))
-      .catch((error) => console.error("Error fetching waiting users:", error));
+    const wait = await callApi("/api/waiting");
+    setWaitingUsers(wait)
   };
 
   const displayMessage = (content, type) => {
