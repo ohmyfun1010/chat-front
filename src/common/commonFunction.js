@@ -1,4 +1,4 @@
-import { SERVER_URL } from "../config";
+import { SERVER_URL,SOCKET_URL } from "../config";
 
 export const callApi = async (url, method = "GET", param = {}, header = {}) => {
   const response = await fetch(SERVER_URL + url, {
@@ -16,5 +16,5 @@ export const callApi = async (url, method = "GET", param = {}, header = {}) => {
 
 
 export const wsApi = () => {
-  return 'ws://'+SERVER_URL+'/api/chat';
+  return 'wss://'+SOCKET_URL+'/api/chat';
 };

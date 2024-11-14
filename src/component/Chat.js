@@ -26,7 +26,9 @@ const Chat = () => {
         event.data ===
           "대기 중입니다. 다른 사용자가 입장할 때까지 기다려주세요." ||
         event.data ===
-          "상대방이 나갔습니다. 대기 중인 사용자와 매칭을 시도합니다."
+          "상대방이 나갔습니다. 대기 중인 사용자와 매칭을 시도합니다." ||
+        event.data === 
+          "1분 동안 활동이 없어 연결이 종료됩니다."
       ) {
         disableSend();
         displayMessage(event.data, "system");
@@ -42,7 +44,7 @@ const Chat = () => {
 
     newSocket.onclose = () => {
       disableSend();
-      displayMessage("상대방이 나갔습니다. 다시 대기 중...", "system");
+      //displayMessage("상대방이 나갔습니다. 다시 대기 중...", "system");
     };
 
     // 5초에 한 번씩 fetch 함수를 호출
