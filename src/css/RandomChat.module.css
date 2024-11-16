@@ -18,6 +18,14 @@ a:visited {
     height: 100vh;
 }
 
+.headerRightIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    /* Pushes the icon to the right */
+}
+
 .icon {
     font-size: 1.5rem;
     color: #333;
@@ -134,13 +142,26 @@ a:visited {
 .messageInput {
     background-color: #ffffff;
     border-top: 1px solid #e5e7eb;
-    padding: 8px;
+    padding: 12px;
+    /* 위아래 패딩을 늘려서 세로 길이 증가 */
     display: flex;
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
     width: 100%;
     box-sizing: border-box;
+    height: 70px;
+    /* 세로 길이를 지정 */
+}
+
+textarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    resize: none;
+    /* 사용자가 크기 조절하지 못하도록 설정 */
 }
 
 .inputField {
@@ -156,7 +177,7 @@ a:visited {
     justify-content: center;
     background-color: #3b82f6;
     color: white;
-    padding: 8px 12px;
+    padding: 12px 14px;
     border-radius: 8px;
     border: none;
     cursor: pointer;

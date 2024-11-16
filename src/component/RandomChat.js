@@ -3,30 +3,17 @@ import { callApi, wsApi } from "../common/commonFunction";
 import styles from "../css/RandomChat.module.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faSync, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 export default function OneOnOneChat() {
+  //ref
   const chatWindowRef = useRef(null);
 
+  //state
   const [isSendDisabled, setIsSendDisabled] = useState(true);
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [chatHistory, setChatHistory] = useState([
-    { id: 1, sender: "other", content: "안녕하세요! 오늘 어떻게 지내세요?" },
-    {
-      id: 2,
-      sender: "me",
-      content:
-        "안녕하세요! 잘 지내고 있어요. 프로젝트는 어떻게 진행되고 있나요?",
-    },
-    {
-      id: 3,
-      sender: "other",
-      content:
-        "프로젝트가 순조롭게 진행 중이에요. 다음 주에 중간 발표가 있어서 준비 중입니다.",
-    },
-  ]);
 
   useEffect(() => {
     const newSocket = new WebSocket(wsApi());
@@ -54,11 +41,12 @@ export default function OneOnOneChat() {
       setIsSendDisabled(true);
     };
 
+    return () => {
+      newSocket.close();
+    };
   }, []);
 
   const displayMessage = (content, type) => {
-    let displayContent;
-
     // 줄바꿈 문자를 기준으로 메시지를 나눕니다.
     const lines = content.split(/<br\s*\/?>/); // <br> 또는 <br />로 분할
 
@@ -67,20 +55,9 @@ export default function OneOnOneChat() {
       <div key={index}>{line || <br />}</div> // 빈 줄인 경우 <br /> 추가
     ));
 
-    if (type === "partner") {
-      displayContent = (
-        <>
-          <strong>상대방</strong> <br />
-          {messageElements} {/* 줄바꿈이 포함된 메시지 */}
-        </>
-      );
-    } else {
-      displayContent = messageElements; // 사용자 메시지인 경우
-    }
-
     setMessages((prevMessages) => [
       ...prevMessages,
-      { sender:type, content: displayContent },
+      { sender: type, content: messageElements },
     ]);
 
     setTimeout(() => {
@@ -107,30 +84,22 @@ export default function OneOnOneChat() {
     setMessage(""); // 입력창 비우기
   };
 
-  // const handleSendMessage = () => {
-  //   if (message.trim()) {
-  //     setChatHistory([
-  //       ...chatHistory,
-  //       { id: chatHistory.length + 1, sender: "me", content: message },
-  //     ]);
-  //     setMessage("");
-  //   }
-  // };
-
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      // If Shift is not held down, send the message
       if (!e.shiftKey) {
         e.preventDefault(); // Enter 키를 누르면 기본적으로 textarea에서 새 줄이 생성됩니다. 이 줄바꿈 동작을 방지하기 위해 preventDefault 메서드를 호출합니다.
         sendMessage(); // Call your send message function
         setMessage("");
       }
-      // If Shift is held down, do nothing (allow the new line)
     }
+  };
+
+  const resetChat = () => {
+    setMessages([]);
   };
 
   return (
@@ -139,10 +108,13 @@ export default function OneOnOneChat() {
         <Link to="/">
           <FontAwesomeIcon icon={faArrowLeft} className={styles.icon} />
         </Link>
+        <div className={styles.headerRightIcon}  onClick={resetChat}>
+          <FontAwesomeIcon icon={faSync} className={styles.icon} />
+        </div>
       </header>
 
       <div ref={chatWindowRef} className={styles.chatHistory}>
-        {messages.map((msg,index) => (
+        {messages.map((msg, index) => (
           <div
             key={index}
             className={`${styles.chatMessage} ${
@@ -159,8 +131,8 @@ export default function OneOnOneChat() {
       </div>
 
       <div className={styles.messageInput}>
-        <input
-          type="text"
+        <textarea
+          rows={2}
           placeholder="메시지를 입력하세요"
           value={message}
           onKeyDown={handleKeyDown}
@@ -168,10 +140,11 @@ export default function OneOnOneChat() {
           className={styles.inputField}
           disabled={isSendDisabled}
         />
-        <button 
-          className={styles.sendButton} 
+        <button
+          className={styles.sendButton}
           onClick={sendMessage}
-          disabled={isSendDisabled}>
+          disabled={isSendDisabled}
+        >
           <FontAwesomeIcon icon={faPaperPlane} />
         </button>
       </div>
