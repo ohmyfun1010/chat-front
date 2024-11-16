@@ -89,11 +89,13 @@ export default function OneOnOneChat() {
   };
 
   const handleKeyDown = (e) => {
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 모바일 기기인지 체크
+
     if (e.key === "Enter") {
-      if (!e.shiftKey) {
-        e.preventDefault(); // Enter 키를 누르면 기본적으로 textarea에서 새 줄이 생성됩니다. 이 줄바꿈 동작을 방지하기 위해 preventDefault 메서드를 호출합니다.
-        sendMessage(); // Call your send message function
-        setMessage("");
+      if (!e.shiftKey && !isMobile) {
+        e.preventDefault(); // 모바일이 아니면 Enter 키에서 기본 동작을 막고
+        sendMessage(); // 메시지 전송
+        setMessage(""); // 입력창 비우기
       }
     }
   };
