@@ -1,0 +1,172 @@
+/* RandomChat.module.css */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    color: blue;
+}
+
+a:visited {
+    color: inherit;
+}
+
+.chatContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.icon {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.chatHeader {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    height: 60px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.iconButton {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.iconButton .fas {
+    font-size: 24px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 12px;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatarFallback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #cbd5e1;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.userInfo {
+    margin-left: 20px;
+    margin-top: 7px;
+    flex: 1;
+}
+
+.username {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.status {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.chatHistory {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #f3f4f6;
+}
+
+.chatMessage {
+    display: flex;
+}
+
+.chatMessageSenderMe {
+    justify-content: flex-end;
+}
+
+.chatMessageSenderOther {
+    justify-content: flex-start;
+}
+
+.chatMessageSenderSystem {
+    justify-content: center;
+    /* Center the system messages horizontally */
+}
+
+.messageBubble {
+    max-width: 70%;
+    padding: 12px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chatMessageSenderMe .messageBubble {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.messageInput {
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.inputField {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.sendButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3b82f6;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.sendButton .fas,
+.sendButton svg {
+    font-size: 1rem;
+}
+
+.sendButton:hover {
+    background-color: #2563eb;
+}

@@ -1,0 +1,168 @@
+.chatApp {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f3f4f6;
+}
+
+.chatHeader {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatHeader h1 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.profileMenu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.menuIcon {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.chatMain {
+  flex: 1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+  text-align: center;
+}
+
+.mainMessage .messageIcon {
+  font-size: 3rem;
+  color: #9ca3af;
+  margin-bottom: 16px;
+}
+
+.mainMessage h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.mainMessage p {
+  color: #6b7280;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  justify-content: center;  /* Centers the buttons horizontally */
+}
+
+.actionButtons button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: white;
+  background-color: #383b41;
+}
+
+.actionButtons button:hover {
+  background-color: #0c0c0e;
+}
+
+.startChat {
+  background-color: #2563eb;
+  color: white;
+}
+
+.createGroup {
+  background-color: #4b5563;
+  color: white;
+}
+
+.chatFooter {
+  background-color: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  padding: 16px;
+}
+
+.chatFooter h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.chatList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chatItem {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.chatItem:hover {
+  background-color: #f1f5f9;
+}
+
+.chatAvatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.chatInfo {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.chatName {
+  font-weight: 500;
+}
+
+.chatMessage {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.groupIcon {
+  font-size: 1.25rem;
+  color: #9ca3af;
+}
+
+
+@media (max-width: 768px) {
+  .actionButtons {
+    flex-direction: column;  /* Stack buttons vertically */
+    gap: 12px;               /* Adjust gap between buttons */
+  }
+
+  .actionButtons button {
+    width: 100%;  /* Make buttons take up full width on mobile */
+  }
+}

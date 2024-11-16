@@ -1,5 +1,5 @@
 /* src/components/NotFound.css */
-.not-found {
+.notFound {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,16 +25,19 @@ p {
     margin: 10px 0;
 }
 
-.home-link {
+.homeLink{
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #721c24; /* 버튼 배경색 */
-    color: white; /* 버튼 글자색 */
+    background-color: #721c24; /* 버튼 배경색 */ 
+    color: rgb(255, 255, 255); /* 버튼 글자색 */
     text-decoration: none; /* 링크 밑줄 제거 */
     border-radius: 5px; /* 모서리 둥글게 */
     transition: background-color 0.3s ease; /* 호버 시 부드러운 전환 효과 */
+    border: none;
+    cursor: pointer;
 }
 
-.home-link:hover {
+.homeLink:hover {
     background-color: #d63384; /* 호버 시 배경색 변화 */
 }
+
