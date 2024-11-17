@@ -9,8 +9,25 @@ export const callApi = async (url, method = "GET", param = {}, header = {}) => {
     },
     body: method !== "GET" ? JSON.stringify(param) : undefined,
   });
-  
-  const res = await response.json();
+
+  if (!response.ok) {
+    const errorMessage = await response.text();  // 서버에서 보내준 오류 메시지(String 형)
+    console.log("[callApi 에러]:"+errorMessage);
+    throw new Error(errorMessage);
+  }
+
+  // 응답 헤더에서 Content-Type을 확인하여 JSON인지 일반 텍스트인지 구분
+  const contentType = response.headers.get("Content-Type");
+
+  let res;
+  if (contentType && contentType.includes("application/json")) {
+    // JSON 응답이면 response.json()
+    res = await response.json();
+  } else {
+    // 그렇지 않으면 response.text()
+    res = await response.text();
+  }
+
   return res;
 };
 

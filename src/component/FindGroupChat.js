@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import styles from "../css/FindGroupChat.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSearch, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { callApi } from "../common/commonFunction";
 
 export default function FindGroupChat() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [groups] = useState([
+  const [groups,setGroups] = useState([
     { id: 1, name: "밥먹는 모임", members: 15 },
     { id: 2, name: "개발팀 채팅방", members: 8 },
     { id: 3, name: "주말 등산 모임", members: 20 },
@@ -14,9 +15,35 @@ export default function FindGroupChat() {
     { id: 5, name: "독서 토론방", members: 7 },
   ]);
 
+  useEffect(() => {
+    findGroupChat();
+  },[]);
+
   const filteredGroups = groups.filter((group) =>
     group.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const findGroupChat = async () => {
+    const url = '/api/chat/group'; 
+    try{
+      const response = await callApi(url, 'GET');
+      let processedRooms = '';
+      if(response){
+
+        processedRooms = response.map((room) => ({
+          name: room.name,
+          members: room.participants.length,
+        }));
+
+        console.log(processedRooms);
+
+        setGroups(processedRooms);
+
+      }
+    }catch(error){
+      console.log(error);
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -42,8 +69,8 @@ export default function FindGroupChat() {
           </div>
 
           <div className={styles.groupList}>
-            {filteredGroups.map((group) => (
-              <div key={group.id} className={styles.groupItem}>
+            {groups.map((group, index) => (
+              <div key={index} className={styles.groupItem}>
                 <div className={styles.groupInfo}>
                   <FontAwesomeIcon icon={faUsers} className={styles.groupIcon} />
                   <div>

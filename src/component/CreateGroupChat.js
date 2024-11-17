@@ -3,13 +3,22 @@ import styles from '../css/MakeGroupChat.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { callApi } from "../common/commonFunction";
 
 export default function CreateGroupChat() {
   const [groupName, setGroupName] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Creating group:", groupName);
+    const url = '/api/chat/group';  // 호출할 API 엔드포인트를 넣으세요.
+    const param = { name:groupName };  // POST 요청의 body에 포함할 데이터
+
+    try{
+      const response = await callApi(url, 'POST', param);
+    }catch(error){
+      console.log(error);
+    }
+    
   };
 
   return (
