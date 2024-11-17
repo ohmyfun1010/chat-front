@@ -8,6 +8,7 @@ import { faArrowLeft, faSync, faPaperPlane } from "@fortawesome/free-solid-svg-i
 export default function OneOnOneChat() {
   //ref
   const chatWindowRef = useRef(null);
+  const textAreaRef = useRef(null); // 입력창을 참조하는 ref 생성
 
   //state
   const [isSendDisabled, setIsSendDisabled] = useState(true);
@@ -82,6 +83,9 @@ export default function OneOnOneChat() {
     }
 
     setMessage(""); // 입력창 비우기
+    
+    textAreaRef.current?.focus(); // 다시 focus 호출
+
   };
 
   const handleInputChange = (e) => {
@@ -134,6 +138,7 @@ export default function OneOnOneChat() {
 
       <div className={styles.messageInput}>
         <textarea
+          ref={textAreaRef}
           rows={2}
           placeholder="메시지를 입력하세요"
           value={message}
