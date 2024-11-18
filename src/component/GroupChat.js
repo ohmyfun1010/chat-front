@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import styles from '../css/GroupChat.module.css'; // Import CSS module
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faUsers, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { wsGroupApi } from "../common/commonFunction";
 
 export default function GroupChatRoom() {
   const [message, setMessage] = useState('');
+  const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([
     { id: 1, sender: '김철수', content: '안녕하세요, 모두!', timestamp: '10:00 AM' },
     { id: 2, sender: '이영희', content: '반갑습니다 :)', timestamp: '10:02 AM' },
     { id: 3, sender: '박지성', content: '오늘 날씨가 좋네요.', timestamp: '10:05 AM' },
   ]);
+  const { roomId } = useParams();
+  useEffect(() => {
+    const newSocket = new WebSocket(wsGroupApi(roomId));
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.close();
+    };
+  },[]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();

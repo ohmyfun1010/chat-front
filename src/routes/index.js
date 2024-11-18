@@ -16,7 +16,7 @@ const RootRoutes = () => {
         <Route path="/chat/random" element={<RandomChat/>} />
         <Route path="/create/groupchat" element={<CreateGroupChat/>} />
         <Route path="/find/groupchat" element={<FindGroupChat/>} />
-        <Route path="/chat/group" element={<GroupChat/>} />
+        <Route path="/chat/group/:roomId" element={<GroupChat/>} />
         {/* 모든 다른 경로에 대해 NotFound 컴포넌트 렌더링 */}
         <Route path="*" element={<NotFound />} />{" "}
       </Routes>

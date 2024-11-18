@@ -30,15 +30,14 @@ export default function FindGroupChat() {
       let processedRooms = '';
       if(response){
 
+        console.log(response);
+
         processedRooms = response.map((room) => ({
           name: room.name,
-          members: room.participants.length,
+          members: room.members,
+          roomId: room.roomId
         }));
-
-        console.log(processedRooms);
-
         setGroups(processedRooms);
-
       }
     }catch(error){
       console.log(error);
@@ -69,7 +68,7 @@ export default function FindGroupChat() {
           </div>
 
           <div className={styles.groupList}>
-            {groups.map((group, index) => (
+            {filteredGroups.map((group, index) => (
               <div key={index} className={styles.groupItem}>
                 <div className={styles.groupInfo}>
                   <FontAwesomeIcon icon={faUsers} className={styles.groupIcon} />
@@ -78,7 +77,7 @@ export default function FindGroupChat() {
                     <p className={styles.groupMembers}>{group.members}명 참여 중</p>
                   </div>
                 </div>
-                <Link to="/chat/group">
+                <Link to={`/chat/group/${group.roomId}`}>
                   <button className={styles.joinButton}>참여</button>
                 </Link>
               </div>

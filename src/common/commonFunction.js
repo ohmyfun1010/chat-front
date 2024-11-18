@@ -35,3 +35,7 @@ export const callApi = async (url, method = "GET", param = {}, header = {}) => {
 export const wsApi = () => {
   return SOCKET_URL+'/api/chat';
 };
+
+export const wsGroupApi = (roomId) => {
+  return SOCKET_URL+'/api/group/chat/'+roomId;
+};

@@ -4,21 +4,55 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { callApi } from "../common/commonFunction";
+import Swal from 'sweetalert2'
 
 export default function CreateGroupChat() {
   const [groupName, setGroupName] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const url = '/api/chat/group';  // 호출할 API 엔드포인트를 넣으세요.
-    const param = { name:groupName };  // POST 요청의 body에 포함할 데이터
-
-    try{
-      const response = await callApi(url, 'POST', param);
-    }catch(error){
-      console.log(error);
+  const handleSubmit = (e) => {
+    if(groupName.trim() == ""){
+      Swal.fire({
+        text: "그룹명을 입력하세요.",
+        icon: "warning",
+      })
+      return;
     }
-    
+    const url = '/api/chat/group'; 
+    const duplicateCheckUrl = '/api/checking/group/';
+    const param = { name:groupName }; 
+    Swal.fire({
+      text: "그룹채팅을 생성하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      cancelButtonColor: "#d33",
+      confirmButtonText: "네",
+      cancelButtonText: "아니오"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try{
+          const duplicateCheck = await callApi(duplicateCheckUrl+groupName,'GET');
+          if(duplicateCheck){
+            Swal.fire({
+              text: "동일한 그룹채팅이름이 존재합니다.",
+              icon: "warning",
+            });
+            return;
+          }
+          const response = await callApi(url, 'POST', param);
+        }catch(error){
+          Swal.fire({
+            text: "그룹채팅 생성중 오류가 발생하였습니다.",
+            icon: "error",
+          });
+          return;
+        }
+        Swal.fire({
+          text: "그룹채팅이 생성되었습니다.",
+          icon: "success"
+        });
+        setGroupName("");
+      }
+    });
   };
 
   return (
@@ -38,7 +72,7 @@ export default function CreateGroupChat() {
             <h2 className={styles.formTitle}>새 그룹 채팅</h2>
             <p className={styles.formSubtitle}>그룹 채팅방의 이름을 입력하세요.</p>
           </div>
-          <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.form}>
             <input
               type="text"
               placeholder="그룹 채팅방 이름"
@@ -46,10 +80,10 @@ export default function CreateGroupChat() {
               onChange={(e) => setGroupName(e.target.value)}
               className={styles.input}
             />
-            <button type="submit" className={styles.submitButton}>
+            <button onClick={handleSubmit} className={styles.submitButton}>
               그룹 만들기
             </button>
-          </form>
+          </div>
         </div>
       </main>
     </div>
