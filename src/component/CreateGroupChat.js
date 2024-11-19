@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../css/MakeGroupChat.module.css';
+import styles from '../css/CreateGroupChat.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
