@@ -2,12 +2,13 @@ import { useState } from 'react';
 import styles from '../css/CreateGroupChat.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { callApi } from "../common/commonFunction";
 import Swal from 'sweetalert2'
 
 export default function CreateGroupChat() {
   const [groupName, setGroupName] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     if(groupName.trim() == ""){
@@ -51,6 +52,7 @@ export default function CreateGroupChat() {
           icon: "success"
         });
         setGroupName("");
+        navigate("/find/groupchat");
       }
     });
   };

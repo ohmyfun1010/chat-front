@@ -142,7 +142,7 @@ export default function OneOnOneChat() {
           rows={2}
           placeholder="메시지를 입력하세요"
           value={message}
-          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyDown}
           onChange={handleInputChange}
           className={styles.inputField}
           disabled={isSendDisabled}

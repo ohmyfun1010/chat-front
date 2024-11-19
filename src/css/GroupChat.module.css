@@ -66,6 +66,16 @@
   align-self: flex-start;
 }
 
+.groupMessageSystem {
+  background-color: #f8f9fa; /* 중앙 메시지 배경색 (선택 사항) */
+  color: #6c757d; /* 중앙 메시지 텍스트 색상 */
+  align-self: center; /* 중앙 정렬 */
+  text-align: center; /* 텍스트도 중앙 정렬 */
+  padding: 5px 10px; /* 메시지 간격 조정 */
+  border-radius: 5px; /* 둥근 테두리 (선택 사항) */
+  margin: 10px 0; /* 위아래 여백 */
+}
+
 .groupSender {
   font-weight: bold;
   margin-bottom: 4px;

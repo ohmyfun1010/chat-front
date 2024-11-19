@@ -77,7 +77,7 @@ export default function FindGroupChat() {
                     <p className={styles.groupMembers}>{group.members}명 참여 중</p>
                   </div>
                 </div>
-                <Link to={`/chat/group/${group.roomId}`}>
+                <Link to={`/chat/group/${group.roomId}/${group.name}`}>
                   <button className={styles.joinButton}>참여</button>
                 </Link>
               </div>
