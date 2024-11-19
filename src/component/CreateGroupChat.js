@@ -50,9 +50,10 @@ export default function CreateGroupChat() {
         Swal.fire({
           text: "그룹채팅이 생성되었습니다.",
           icon: "success"
+        }).then(() => {
+          setGroupName("");
+          navigate("/find/groupchat");
         });
-        setGroupName("");
-        navigate("/find/groupchat");
       }
     });
   };

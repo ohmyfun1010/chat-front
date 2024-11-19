@@ -14,9 +14,10 @@ export default function GroupChatRoom() {
   const [message, setMessage] = useState("");
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [nickName, setNickName] = useState("");
   const { roomId,name } = useParams();
   const navigate = useNavigate();
-  let nickName = "";
+  let exitNickName = '';
 
   useEffect(() => {
 
@@ -60,11 +61,12 @@ export default function GroupChatRoom() {
         cancelButtonText: "취소",
         showLoaderOnConfirm: true,
         preConfirm: (result) => {
-          nickName = result;
-          if (nickName) {
+          setNickName(result);
+          exitNickName = result;
+          if (result) {
             const newMessage = {
               sender: "system",
-              content: `${nickName}님이 입장하셨습니다.`,
+              content: `${result}님이 입장하셨습니다.`,
             };
             newSocket.send(JSON.stringify(newMessage));
           }
@@ -86,7 +88,7 @@ export default function GroupChatRoom() {
       if (newSocket.readyState === WebSocket.OPEN) {
         const newMessage = {
           sender: "system",
-          content: `${nickName}님이 퇴장하셨습니다.`,
+          content: `${exitNickName}님이 퇴장하셨습니다.`,
         };
         newSocket.send(JSON.stringify(newMessage)); // 퇴장 메시지 전송
         newSocket.close(); // 소켓 종료
