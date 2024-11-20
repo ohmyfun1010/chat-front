@@ -73,7 +73,7 @@ export default function GroupChatRoom() {
           if (result) {
             const newMessage = {
               sender: "system",
-              content: `${result}님이 입장하셨습니다.`,
+              content: `${result}!@!`,
             };
             newSocket.send(JSON.stringify(newMessage));
           }
@@ -93,14 +93,7 @@ export default function GroupChatRoom() {
 
     //componentdidunmount -> useEffect 에서 관리하는 state 가 없을때
     return () => {
-      if (newSocket.readyState === WebSocket.OPEN) {
-        const newMessage = {
-          sender: "system",
-          content: `${exitNickName}님이 퇴장하셨습니다.`,
-        };
-        newSocket.send(JSON.stringify(newMessage)); // 퇴장 메시지 전송
-        newSocket.close(); // 소켓 종료
-      }
+      newSocket.close(); // 소켓 종료
     };
 
   }, []);
@@ -139,8 +132,10 @@ export default function GroupChatRoom() {
   const handleSendMessage = (e) => {
     if (!message.trim()) return; // 메시지가 비어있으면 종료
 
+    const trimMessage = message.trim();
+
     // 줄바꿈을 <br />로 변환
-    const formattedMessage = message.replace(/\n/g, "<br />");
+    const formattedMessage = trimMessage.replace(/\n/g, "<br />");
 
     // 메시지 표시
     displayMessage(formattedMessage,nickName);
