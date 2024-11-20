@@ -5,6 +5,7 @@ export const callApi = async (url, method = "GET", param = {}, header = {}) => {
     method,
     headers: {
       'Content-Type': 'application/json',
+      //origin: SERVER_URL,
       ...header
     },
     body: method !== "GET" ? JSON.stringify(param) : undefined,

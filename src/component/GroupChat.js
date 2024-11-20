@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "../css/GroupChat.module.css"; // Import CSS module
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +11,11 @@ import { wsGroupApi } from "../common/commonFunction";
 import Swal from "sweetalert2";
 
 export default function GroupChatRoom() {
+
+  //ref
+  const chatWindowRef = useRef(null);
+  const textAreaRef = useRef(null); // 입력창을 참조하는 ref 생성
+
   const [message, setMessage] = useState("");
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -19,33 +24,35 @@ export default function GroupChatRoom() {
   const navigate = useNavigate();
   let exitNickName = '';
 
+  //componentdidmount -> useEffect 에서 관리하는 state 가 없을때
   useEffect(() => {
 
     const newSocket = new WebSocket(wsGroupApi(roomId));
     setSocket(newSocket);
 
     newSocket.onmessage = (event) => {
+      
       let receivedMessage = "";
-
       try {
         receivedMessage = JSON.parse(event.data); // assuming JSON format
       } catch (error) {
         receivedMessage = event.data;
       }
 
-      // 새 메시지를 기존 메시지 목록에 추가
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: prevMessages.length + 1,
-          sender: receivedMessage.sender,
-          content: receivedMessage.content || receivedMessage,
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ]);
+      const sender = receivedMessage.sender || "system";
+      const content = receivedMessage.content || receivedMessage;
+
+      // 줄바꿈 처리
+      const formattedContent = content.replace(/\n/g, "<br />");
+
+      // 메시지 렌더링
+      displayMessage(formattedContent, sender);
+
+      // 상대방이 메시지를 보냈을 때도 스크롤을 내려주기
+      if (chatWindowRef.current) {
+        chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+      }
+
     };
 
     newSocket.onopen = () => {
@@ -80,10 +87,11 @@ export default function GroupChatRoom() {
       });
     };
 
+    // 소켓 해제시 이벤트
     newSocket.onclose = () => {
-      // 소켓 해제시 이벤트
     };
 
+    //componentdidunmount -> useEffect 에서 관리하는 state 가 없을때
     return () => {
       if (newSocket.readyState === WebSocket.OPEN) {
         const newMessage = {
@@ -94,31 +102,71 @@ export default function GroupChatRoom() {
         newSocket.close(); // 소켓 종료
       }
     };
+
   }, []);
 
+  const displayMessage = (content,sender) => {
+
+    // 줄바꿈 문자를 기준으로 메시지를 나눕니다.
+    const lines = content.split(/<br\s*\/?>/); // <br> 또는 <br />로 분할
+
+    // 각 줄을 <div>로 감싸서 배열을 만듭니다.
+    const messageElements = lines.map((line, index) => (
+      <div key={index}>{line || <br />}</div> // 빈 줄인 경우 <br /> 추가
+    ));
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: prevMessages.length + 1,
+        sender: sender,
+        content: messageElements,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
+    ]);
+
+    setTimeout(() => {
+      if (chatWindowRef.current) {
+        chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+      }
+    }, 100);
+  };
+
+
   const handleSendMessage = (e) => {
-    if (message.trim()) {
-      const newMessage = {
-        sender: nickName,
-        content: message,
-      };
-      socket.send(JSON.stringify(newMessage));
+    if (!message.trim()) return; // 메시지가 비어있으면 종료
 
-      // 보내는 메시지를 상태에 추가 (실시간으로 화면에 반영)
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: prevMessages.length + 1,
-          sender: nickName,
-          content: message,
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ]);
+    // 줄바꿈을 <br />로 변환
+    const formattedMessage = message.replace(/\n/g, "<br />");
 
-      setMessage(""); // 메시지 입력란 초기화
+    // 메시지 표시
+    displayMessage(formattedMessage,nickName);
+
+    const newMessage = {
+      sender: nickName,
+      content: formattedMessage,
+    };
+
+    socket.send(JSON.stringify(newMessage));
+    setMessage(""); // 메시지 입력란 초기화
+  };
+
+  useEffect(()=>{
+    textAreaRef.current?.focus(); // 다시 focus 호출
+  },[message])
+
+  const handleKeyUp = (e) => {
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 모바일 기기인지 체크
+
+    if (e.key === "Enter") {
+      if (!e.shiftKey && !isMobile) {
+        e.preventDefault(); // 모바일이 아니면 Enter 키에서 기본 동작을 막고
+        handleSendMessage(); // 메시지 전송
+        setMessage(""); // 입력창 비우기
+      }
     }
   };
 
@@ -131,7 +179,7 @@ export default function GroupChatRoom() {
         <h1 className={styles.groupChatTitle}>{name}</h1>
         <FontAwesomeIcon icon={faUsers} className={styles.groupIcon} />
       </header>
-      <main className={styles.groupChatMain}>
+      <main ref={chatWindowRef} className={styles.groupChatMain}>
         <div className={styles.groupMessages}>
           {messages.map((msg) => (
             <div
@@ -147,17 +195,22 @@ export default function GroupChatRoom() {
               {msg.sender !== nickName && msg.sender !== "system" && (
                 <p className={styles.groupSender}>{msg.sender}</p>
               )}
-              <div className="groupMessageContent">{msg.content}</div>
+              <div className="groupMessageContent">
+                {msg.content}
+              </div>
               <p className={styles.groupTimestamp}>{msg.timestamp}</p>
             </div>
           ))}
         </div>
       </main>
       <div className={styles.messageInput}>
-        <input
+        <textarea
+          ref={textAreaRef}
           type="text"
+          rows={2}
           placeholder="메시지를 입력하세요..."
           value={message}
+          onKeyUp={handleKeyUp}
           onChange={(e) => setMessage(e.target.value)}
           className={styles.inputField}
         />

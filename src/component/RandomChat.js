@@ -17,6 +17,7 @@ export default function OneOnOneChat() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
+
     const newSocket = new WebSocket(wsApi());
     setSocket(newSocket);
 
@@ -92,7 +93,7 @@ export default function OneOnOneChat() {
     setMessage(e.target.value);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyUp = (e) => {
     const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 모바일 기기인지 체크
 
     if (e.key === "Enter") {
@@ -142,7 +143,7 @@ export default function OneOnOneChat() {
           rows={2}
           placeholder="메시지를 입력하세요"
           value={message}
-          onKeyUp={handleKeyDown}
+          onKeyUp={handleKeyUp}
           onChange={handleInputChange}
           className={styles.inputField}
           disabled={isSendDisabled}

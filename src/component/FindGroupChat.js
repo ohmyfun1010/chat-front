@@ -7,16 +7,13 @@ import { callApi } from "../common/commonFunction";
 
 export default function FindGroupChat() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [groups,setGroups] = useState([
-    { id: 1, name: "밥먹는 모임", members: 15 },
-    { id: 2, name: "개발팀 채팅방", members: 8 },
-    { id: 3, name: "주말 등산 모임", members: 20 },
-    { id: 4, name: "영화 감상 클럽", members: 12 },
-    { id: 5, name: "독서 토론방", members: 7 },
-  ]);
+  const [groups,setGroups] = useState([]);
 
   useEffect(() => {
-    findGroupChat();
+    //그룹채팅방에서 소켓 소멸될때 텀이 있어서 0.1 초 뒤에 접속자수 확인
+    setTimeout(() => {
+      findGroupChat();
+    }, 100);
   },[]);
 
   const filteredGroups = groups.filter((group) =>
