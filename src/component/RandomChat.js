@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSync, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 export default function OneOnOneChat() {
+
   //ref
   const chatWindowRef = useRef(null);
   const textAreaRef = useRef(null); // 입력창을 참조하는 ref 생성
@@ -15,6 +16,7 @@ export default function OneOnOneChat() {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [inputKey, setInputKey] = useState(0);
 
   useEffect(() => {
 
@@ -62,14 +64,10 @@ export default function OneOnOneChat() {
       { sender: type, content: messageElements },
     ]);
 
-    setTimeout(() => {
-      if (chatWindowRef.current) {
-        chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
-      }
-    }, 100);
   };
 
   const sendMessage = () => {
+
     if (!message.trim()) return; // 메시지가 비어있으면 종료
 
     // 줄바꿈을 <br />로 변환
@@ -84,23 +82,30 @@ export default function OneOnOneChat() {
     }
 
     setMessage(""); // 입력창 비우기
-    
-    textAreaRef.current?.focus(); // 다시 focus 호출
-
+    setInputKey(Math.random()); //textAreaRef.current?.focus() 이후 재랜더링을 통해 마지막글자 지워지지않는 버그 개선
   };
+
+  useEffect(() => {
+    textAreaRef.current?.focus();
+  }, [message]);
+
+  useEffect(()=>{
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  },[messages])
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
   };
 
-  const handleKeyUp = (e) => {
+  const handleKeyDown = (e) => {
     const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 모바일 기기인지 체크
 
     if (e.key === "Enter") {
       if (!e.shiftKey && !isMobile) {
         e.preventDefault(); // 모바일이 아니면 Enter 키에서 기본 동작을 막고
         sendMessage(); // 메시지 전송
-        setMessage(""); // 입력창 비우기
       }
     }
   };
@@ -139,11 +144,12 @@ export default function OneOnOneChat() {
 
       <div className={styles.messageInput}>
         <textarea
+          key={inputKey}
           ref={textAreaRef}
           rows={2}
           placeholder="메시지를 입력하세요"
           value={message}
-          onKeyUp={handleKeyUp}
+          onKeyDown={handleKeyDown}
           onChange={handleInputChange}
           className={styles.inputField}
           disabled={isSendDisabled}

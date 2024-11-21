@@ -21,6 +21,7 @@ export default function GroupChatRoom() {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [nickName, setNickName] = useState("");
+  const [inputKey, setInputKey] = useState(0);
 
   //navi, useParam
   const { roomId,name } = useParams();
@@ -138,12 +139,12 @@ export default function GroupChatRoom() {
 
     socket.send(JSON.stringify(newMessage));
     setMessage(""); // 메시지 입력란 초기화
-
+    setInputKey(Math.random()); //textAreaRef.current?.focus() 이후 재랜더링을 통해 마지막글자 지워지지않는 버그 개선
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     textAreaRef.current?.focus();
-  },[message]);
+  }, [message]);
 
   //스크롤바 제일 아래로 내리기
   useEffect(()=>{
@@ -202,6 +203,7 @@ export default function GroupChatRoom() {
       </main>
       <div className={styles.messageInput}>
         <textarea
+          key={inputKey}
           ref={textAreaRef}
           type="text"
           rows={2}
