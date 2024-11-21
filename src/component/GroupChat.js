@@ -50,11 +50,6 @@ export default function GroupChatRoom() {
       // 메시지 렌더링
       displayMessage(formattedContent, sender);
 
-      // 상대방이 메시지를 보냈을 때도 스크롤을 내려주기
-      if (chatWindowRef.current) {
-        chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
-      }
-
     };
 
     newSocket.onopen = () => {
@@ -142,13 +137,13 @@ export default function GroupChatRoom() {
     };
 
     socket.send(JSON.stringify(newMessage));
-
-    // 메시지 입력란 초기화를 약간 지연하여 조합 상태가 안정되게 처리
-    setTimeout(() => {
-      setMessage(""); // 메시지 입력란 초기화
-    }, 100);
+    setMessage(""); // 메시지 입력란 초기화
 
   };
+
+  useEffect(()=>{
+    textAreaRef.current?.focus();
+  },[message]);
 
   //스크롤바 제일 아래로 내리기
   useEffect(()=>{
@@ -161,17 +156,12 @@ export default function GroupChatRoom() {
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
   
     if (e.key === "Enter") {
-      if (e.nativeEvent.isComposing) return; // 조합 상태에서는 아무것도 하지 않음
       if (!e.shiftKey && !isMobile) {
         e.preventDefault(); // 기본 동작 방지
         handleSendMessage(); // 메시지 전송
       }
     }
   };
-
-  useEffect(()=>{
-    console.log('변경됨');
-  },[message])
 
   const hadleTextAreaChange = (e) => {
     setMessage(e.target.value)
