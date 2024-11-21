@@ -16,13 +16,15 @@ export default function GroupChatRoom() {
   const chatWindowRef = useRef(null);
   const textAreaRef = useRef(null); // 입력창을 참조하는 ref 생성
 
+  //state
   const [message, setMessage] = useState("");
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [nickName, setNickName] = useState("");
+
+  //navi, useParam
   const { roomId,name } = useParams();
   const navigate = useNavigate();
-  let exitNickName = '';
 
   //componentdidmount -> useEffect 에서 관리하는 state 가 없을때
   useEffect(() => {
@@ -56,6 +58,7 @@ export default function GroupChatRoom() {
     };
 
     newSocket.onopen = () => {
+
       // 소켓 연결시 이벤트
       Swal.fire({
         title: "채팅방에서 사용할 닉네임을 입력하세요.",
@@ -69,7 +72,6 @@ export default function GroupChatRoom() {
         showLoaderOnConfirm: true,
         preConfirm: (result) => {
           setNickName(result);
-          exitNickName = result;
           if (result) {
             const newMessage = {
               sender: "system",
@@ -120,16 +122,10 @@ export default function GroupChatRoom() {
         }),
       },
     ]);
-
-    setTimeout(() => {
-      if (chatWindowRef.current) {
-        chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
-      }
-    }, 100);
   };
 
-
   const handleSendMessage = (e) => {
+
     if (!message.trim()) return; // 메시지가 비어있으면 종료
 
     const trimMessage = message.trim();
@@ -146,24 +142,40 @@ export default function GroupChatRoom() {
     };
 
     socket.send(JSON.stringify(newMessage));
-    setMessage(""); // 메시지 입력란 초기화
+
+    // 메시지 입력란 초기화를 약간 지연하여 조합 상태가 안정되게 처리
+    setTimeout(() => {
+      setMessage(""); // 메시지 입력란 초기화
+    }, 100);
+
   };
 
+  //스크롤바 제일 아래로 내리기
   useEffect(()=>{
-    textAreaRef.current?.focus(); // 다시 focus 호출
-  },[message])
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  },[messages])
 
-  const handleKeyUp = (e) => {
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 모바일 기기인지 체크
-
+  const handleKeyDown = (e) => {
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  
     if (e.key === "Enter") {
+      if (e.nativeEvent.isComposing) return; // 조합 상태에서는 아무것도 하지 않음
       if (!e.shiftKey && !isMobile) {
-        e.preventDefault(); // 모바일이 아니면 Enter 키에서 기본 동작을 막고
+        e.preventDefault(); // 기본 동작 방지
         handleSendMessage(); // 메시지 전송
-        setMessage(""); // 입력창 비우기
       }
     }
   };
+
+  useEffect(()=>{
+    console.log('변경됨');
+  },[message])
+
+  const hadleTextAreaChange = (e) => {
+    setMessage(e.target.value)
+  }
 
   return (
     <div className={styles.groupChatContainer}>
@@ -205,8 +217,8 @@ export default function GroupChatRoom() {
           rows={2}
           placeholder="메시지를 입력하세요..."
           value={message}
-          onKeyUp={handleKeyUp}
-          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onChange={hadleTextAreaChange}
           className={styles.inputField}
         />
         <button className={styles.sendButton} onClick={handleSendMessage}>
