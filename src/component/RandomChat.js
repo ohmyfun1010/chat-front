@@ -103,7 +103,7 @@ export default function OneOnOneChat() {
     const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 모바일 기기인지 체크
 
     if (e.key === "Enter") {
-      if (!e.shiftKey && !isMobile) {
+      if (!e.shiftKey && !isMobile && !e.nativeEvent.isComposing) {
         e.preventDefault(); // 모바일이 아니면 Enter 키에서 기본 동작을 막고
         sendMessage(); // 메시지 전송
       }
