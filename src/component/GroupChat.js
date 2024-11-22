@@ -33,6 +33,7 @@ export default function GroupChatRoom() {
     const newSocket = new WebSocket(wsGroupApi(roomId));
     setSocket(newSocket);
 
+    //메시지 수신시 실행되는 함수
     newSocket.onmessage = (event) => {
       
       let receivedMessage = "";
@@ -53,41 +54,58 @@ export default function GroupChatRoom() {
 
     };
 
+    //소켓 연결시 실행되는 함수
     newSocket.onopen = () => {
 
-      // 소켓 연결시 이벤트
-      Swal.fire({
-        title: "환영합니다.",
-        text:"채팅방에서 사용할 닉네임을 입력하세요.",
-        input: "text",
-        inputAttributes: {
-          autocapitalize: "off",
-        },
-        showCancelButton: true,
-        confirmButtonText: "확인",
-        cancelButtonText: "취소",
-        showLoaderOnConfirm: true,
-        preConfirm: (result) => {
-          setNickName(result);
-          if (result) {
-            const newMessage = {
-              sender: "system",
-              content: `${result}!@!`,
-            };
-            newSocket.send(JSON.stringify(newMessage));
+      const savedNickName = sessionStorage.getItem("nickname");
+
+      if(savedNickName){
+        setNickName(savedNickName);
+        const newMessage = {
+          sender: "system",
+          content: `${savedNickName}!@!`,
+        };
+        newSocket.send(JSON.stringify(newMessage));
+      }else{
+
+        // 소켓 연결시 이벤트
+        Swal.fire({
+          title: "환영합니다.",
+          text:"채팅방에서 사용할 닉네임을 입력하세요.",
+          input: "text",
+          inputAttributes: {
+            autocapitalize: "off",
+          },
+          showCancelButton: true,
+          confirmButtonText: "확인",
+          cancelButtonText: "취소",
+          showLoaderOnConfirm: true,
+          preConfirm: (result) => {
+            sessionStorage.setItem("nickname", result); // 닉네임 저장
+            setNickName(result);
+            if (result) {
+              const newMessage = {
+                sender: "system",
+                content: `${result}!@!`,
+              };
+              newSocket.send(JSON.stringify(newMessage));
+            }
+          },
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.cancel) {
+            navigate("/find/groupchat");
+          } else if (result.dismiss === Swal.DismissReason.esc || result.dismiss === Swal.DismissReason.backdrop) {
+            navigate("/find/groupchat"); // 필요한 로직을 추가하세요.
           }
-        },
-      }).then((result) => {
-        if (result.dismiss === Swal.DismissReason.cancel) {
-          navigate("/find/groupchat");
-        } else if (result.dismiss === Swal.DismissReason.esc || result.dismiss === Swal.DismissReason.backdrop) {
-          navigate("/find/groupchat"); // 필요한 로직을 추가하세요.
-        }
-      });
+        });
+
+      }
+
     };
 
-    // 소켓 해제시 이벤트
+    // 소켓 해제시 실행되는 함수
     newSocket.onclose = () => {
+      sessionStorage.removeItem("nickname");
     };
 
     //componentdidunmount -> useEffect 에서 관리하는 state 가 없을때
