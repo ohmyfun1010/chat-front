@@ -57,7 +57,8 @@ export default function GroupChatRoom() {
 
       // 소켓 연결시 이벤트
       Swal.fire({
-        title: "채팅방에서 사용할 닉네임을 입력하세요.",
+        title: "환영합니다.",
+        text:"채팅방에서 사용할 닉네임을 입력하세요.",
         input: "text",
         inputAttributes: {
           autocapitalize: "off",
@@ -153,11 +154,14 @@ export default function GroupChatRoom() {
     }
   },[messages])
 
-  const handleKeyDown = (e) => {
+  const onKeyDown = (e) => {
+
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
   
     if (e.key === "Enter") {
-      if (!e.shiftKey && !isMobile) {
+
+      //e.nativeEvent.isComposing onKeyDown 마지막 글자 2번 엔터쳐지는 버그 개선용
+      if (!e.shiftKey && !isMobile && !e.nativeEvent.isComposing) {
         e.preventDefault(); // 기본 동작 방지
         handleSendMessage(); // 메시지 전송
       }
@@ -209,7 +213,7 @@ export default function GroupChatRoom() {
           rows={2}
           placeholder="메시지를 입력하세요..."
           value={message}
-          onKeyDown={handleKeyDown}
+          onKeyDown={onKeyDown}
           onChange={hadleTextAreaChange}
           className={styles.inputField}
         />
