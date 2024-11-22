@@ -9,7 +9,7 @@ export default function OneOnOneChat() {
 
   //ref
   const chatWindowRef = useRef(null);
-  const textAreaRef = useRef(null); // 입력창을 참조하는 ref 생성
+  const messageRef = useRef(null); // 입력창을 참조하는 ref 생성
 
   //state
   const [isSendDisabled, setIsSendDisabled] = useState(true);
@@ -50,6 +50,11 @@ export default function OneOnOneChat() {
     };
   }, []);
 
+  //매칭되면 입력란에 포커스 주기
+  useEffect(()=>{
+    messageRef.current?.focus();
+  },[isSendDisabled])
+
   const displayMessage = (content, type) => {
     // 줄바꿈 문자를 기준으로 메시지를 나눕니다.
     const lines = content.split(/<br\s*\/?>/); // <br> 또는 <br />로 분할
@@ -86,7 +91,7 @@ export default function OneOnOneChat() {
   };
 
   useEffect(() => {
-    textAreaRef.current?.focus();
+    messageRef.current?.focus();
   }, [message]);
 
   useEffect(()=>{
@@ -145,7 +150,7 @@ export default function OneOnOneChat() {
       <div className={styles.messageInput}>
         <textarea
           key={inputKey}
-          ref={textAreaRef}
+          ref={messageRef}
           rows={2}
           placeholder="메시지를 입력하세요"
           value={message}

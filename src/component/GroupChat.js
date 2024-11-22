@@ -111,6 +111,7 @@ export default function GroupChatRoom() {
     //componentdidunmount -> useEffect 에서 관리하는 state 가 없을때
     return () => {
       newSocket.close(); // 소켓 종료
+      Swal.close(); // 현재 열려 있는 Swal 알림창을 닫음
     };
 
   }, []);
