@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from "../css/Home.module.css";
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { FloatingActionButton } from './FloatingActionButton';
 
 
 export default function ChatMainScreen() {
@@ -48,7 +49,6 @@ export default function ChatMainScreen() {
           </Link>
         </div>
       </main>
-
       {/* Recent Chats */}
       <footer className={styles.chatFooter}>
         <h2>최근 생성된 그룹 채팅</h2>
@@ -67,6 +67,7 @@ export default function ChatMainScreen() {
           ))}
         </ul>
       </footer>
+      <FloatingActionButton />
     </div>
   );
 }

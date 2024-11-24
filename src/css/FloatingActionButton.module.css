@@ -1,0 +1,112 @@
+/* FAB Container */
+.fabContainer {
+    position: fixed;
+    bottom: 1rem;
+    /* 제일 하단에 고정 */
+    right: 1rem;
+    /* 브라우저 오른쪽 하단에 고정 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 50;
+}
+
+/* FAB Actions */
+.fabActions {
+    display: flex;
+    flex-direction: column-reverse;
+    /* 위로 나오도록 설정 */
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(1rem);
+    /* 처음에는 숨겨진 상태 */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    margin-bottom:5px;
+}
+
+.fabActions.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    /* 열릴 때 위로 올라오도록 설정 */
+}
+
+.fabAction {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-top:5px;
+    background-color: #ffffff;
+    color: white;
+    border: none;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: transform 0.3s, opacity 0.3s;
+    position: relative;
+}
+
+.fabAction:hover {
+    transform: scale(1.1);
+}
+
+.fabTooltip {
+    position: absolute;
+    left: -150%;
+    /* 툴팁을 왼쪽으로 배치 */
+    top: 50%;
+    transform: translateY(-50%);
+    background: #333;
+    color: #fff;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.fabAction:hover .fabTooltip {
+    opacity: 1;
+}
+
+/* FAB Main Button */
+.fabMain {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #4b5563;
+    color: white;
+    border: none;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.fabMain:hover {
+    transform: scale(1.1);
+}
+
+/* Action Button Colors */
+.bgBlue {
+    background-color: #3b82f6;
+}
+
+.bgGreen {
+    background-color: #22c55e;
+}
+
+.bgRed {
+    background-color: #ef4444;
+}
