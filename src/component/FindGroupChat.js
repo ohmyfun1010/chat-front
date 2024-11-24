@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
 import styles from "../css/FindGroupChat.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,10 +6,16 @@ import { faArrowLeft, faSearch, faUsers } from "@fortawesome/free-solid-svg-icon
 import { callApi } from "../common/commonFunction";
 
 export default function FindGroupChat() {
+
+  //ref
+  const searchRef = useRef(null);
+
+  //state
   const [searchTerm, setSearchTerm] = useState("");
   const [groups,setGroups] = useState([]);
 
   useEffect(() => {
+    searchRef.current?.focus();
     //그룹채팅방에서 소켓 소멸될때 텀이 있어서 0.1 초 뒤에 접속자수 확인
     setTimeout(() => {
       findGroupChat();
@@ -55,6 +61,7 @@ export default function FindGroupChat() {
         <div className={styles.content}>
           <div className={styles.searchContainer}>
             <input
+              ref={searchRef}
               type="text"
               placeholder="그룹 채팅방 검색"
               value={searchTerm}

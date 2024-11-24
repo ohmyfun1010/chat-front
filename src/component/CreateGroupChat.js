@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from '../css/CreateGroupChat.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faUsers } from '@fortawesome/free-solid-svg-icons';
@@ -7,7 +7,14 @@ import { callApi } from "../common/commonFunction";
 import Swal from 'sweetalert2'
 
 export default function CreateGroupChat() {
+
+  //ref
+  const groupChatNameRef = useRef(null);
+
+  //state
   const [groupName, setGroupName] = useState("");
+
+  //navi
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -58,6 +65,21 @@ export default function CreateGroupChat() {
     });
   };
 
+  const handleOnKeyDown = (e) => {
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    if (e.key === "Enter") {
+      //e.nativeEvent.isComposing onKeyDown 마지막 글자 2번 엔터쳐지는 버그 개선용
+      if (!e.shiftKey && !isMobile && !e.nativeEvent.isComposing) {
+        e.preventDefault(); // 기본 동작 방지
+        handleSubmit(); // 메시지 전송
+      }
+    }
+  }
+
+  useEffect(()=>{
+    groupChatNameRef.current?.focus();
+  },[])
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -78,8 +100,10 @@ export default function CreateGroupChat() {
           <div className={styles.form}>
             <input
               type="text"
+              ref={groupChatNameRef}
               placeholder="그룹 채팅방 이름"
               value={groupName}
+              onKeyDown={handleOnKeyDown}
               onChange={(e) => setGroupName(e.target.value)}
               className={styles.input}
             />
