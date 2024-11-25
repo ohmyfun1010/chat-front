@@ -16,7 +16,6 @@ export default function FindGroupChat() {
   const [groups,setGroups] = useState([]);
 
   useEffect(() => {
-    searchRef.current?.focus();
     //그룹채팅방에서 소켓 소멸될때 텀이 있어서 0.1 초 뒤에 접속자수 확인
     setTimeout(() => {
       findGroupChat();
