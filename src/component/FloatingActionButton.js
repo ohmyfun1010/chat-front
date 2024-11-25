@@ -3,11 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useNavigate } from "react-router-dom";
 import { faPlus, faTimes, faDownload, faHome, faCommentDots, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import styles from '../css/FloatingActionButton.module.css'
+import InstallDialog from './InstallDialog';
 
-export function FloatingActionButton({buttomOption=1}) {
+export default function FloatingActionButton({buttomOption=1}) {
 
   const [isOpen, setIsOpen] = useState(false)
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
+  const [isIOS, setIsIOS] = useState(false);
+  const [showIOSDialog, setShowIOSDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleInstallClick = () => {
@@ -35,6 +38,8 @@ export function FloatingActionButton({buttomOption=1}) {
   ]
 
   useEffect(() => {
+
+    detectIOS();
     const handleBeforeInstallPrompt = (event) => {
       event.preventDefault();
       setDeferredInstallPrompt(event);
@@ -47,6 +52,18 @@ export function FloatingActionButton({buttomOption=1}) {
     };
   }, []);
 
+  const detectIOS = () => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    setIsIOS(isIOS);
+    if (isIOS && !localStorage.getItem('iosDialogShown')) {
+      setShowIOSDialog(true);
+    }
+  };
+
+  const handleCloseIOSDialog = () => {
+    setShowIOSDialog(false);
+    localStorage.setItem('iosDialogShown', 'true');
+  };
 
   return (
     <div style={{
@@ -74,6 +91,7 @@ export function FloatingActionButton({buttomOption=1}) {
       <button className={styles.fabMain} onClick={() => setIsOpen(!isOpen)}>
         <FontAwesomeIcon icon={isOpen ? faTimes : faPlus} />
       </button>
+      <InstallDialog isOpen={showIOSDialog} onClose={handleCloseIOSDialog}/>
     </div>
   )
 }

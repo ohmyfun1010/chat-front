@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { wsGroupApi } from "../common/commonFunction";
 import Swal from "sweetalert2";
-import { FloatingActionButton } from './FloatingActionButton';
+import FloatingActionButton from './FloatingActionButton';
 
 export default function GroupChatRoom() {
 

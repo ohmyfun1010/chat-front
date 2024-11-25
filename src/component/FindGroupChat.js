@@ -4,7 +4,7 @@ import styles from "../css/FindGroupChat.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSearch, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { callApi } from "../common/commonFunction";
-import { FloatingActionButton } from './FloatingActionButton';
+import FloatingActionButton from './FloatingActionButton';
 
 export default function FindGroupChat() {
 

@@ -1,0 +1,69 @@
+.dialogOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialogContent {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 90%;
+    width: 350px;
+}
+
+.dialogTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.dialogText {
+    margin-bottom: 1rem;
+    color: #666;
+}
+
+.dialogList {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+    color: #666;
+}
+
+.dialogList li {
+    margin-bottom: 0.5rem;
+}
+
+.iosIcon {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+.dialogCloseButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.dialogCloseButton:hover {
+    background-color: #0056b3;
+}
+
+
+.dialogButtonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }

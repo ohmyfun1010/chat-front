@@ -4,7 +4,7 @@ import styles from "../css/RandomChat.module.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSync, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { FloatingActionButton } from './FloatingActionButton';
+import FloatingActionButton from './FloatingActionButton';
 
 export default function OneOnOneChat() {
 
