@@ -1,7 +1,7 @@
 /* FAB Container */
 .fabContainer {
     position: fixed;
-    bottom: 1rem;
+    bottom: 5rem;
     /* 제일 하단에 고정 */
     right: 1rem;
     /* 브라우저 오른쪽 하단에 고정 */

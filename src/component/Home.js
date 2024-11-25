@@ -1,16 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from "../css/Home.module.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { callApi } from "../common/commonFunction";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { FloatingActionButton } from './FloatingActionButton';
 
 
 export default function ChatMainScreen() {
+
+  const navigate = useNavigate();
   const [chats, setChats] = useState([
-    { id: 1, name: "밥먹는 모임", lastMessage: "오늘 점심 뭐 먹을까요?", isGroup: true },
-    { id: 2, name: "개발팀 채팅방", lastMessage: "새 기능 논의해요", isGroup: true },
-    { id: 3, name: "주말 등산 모임", lastMessage: "이번 주 토요일 어떠세요?", isGroup: true },
+    { id: 1, name: "밥먹는 모임", members: "5명" },
+    { id: 2, name: "개발팀 채팅방", members: "5명" },
+    { id: 3, name: "주말 등산 모임", members: "5명"},
   ]);
+
+  useEffect(()=>{
+    findRecentGroupChat();
+  },[])
+
+  const findRecentGroupChat = async () => {
+    const url = '/api/chat/recent/group/3'; 
+    try{
+      const response = await callApi(url, 'GET');
+      if(response){
+        setChats(response);
+      }
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  const moveGroupChat = (roomId,roomName) => {
+    const urlPath = '/chat/group/'+roomId+'/'+roomName;
+    navigate(urlPath);
+  }
 
   return (
     <div className={styles.chatApp}>
@@ -52,22 +76,29 @@ export default function ChatMainScreen() {
       {/* Recent Chats */}
       <footer className={styles.chatFooter}>
         <h2>최근 생성된 그룹 채팅</h2>
-        <ul className={styles.chatList}>
-          {chats.map((chat) => (
-            <li key={chat.id} className={styles.chatItem}>
-              <div className={styles.chatAvatar}>
-                <i className="fas fa-user-circle fa-2x"></i>
-              </div>
-              <div className={styles.chatInfo}>
-                <div className={styles.chatName}>{chat.name}</div>
-                <div className={styles.chatMessage}>{chat.lastMessage}</div>
-              </div>
-              <i className="fas fa-users {styles.groupIcon}"></i>
-            </li>
-          ))}
-        </ul>
+        {chats.length > 0 ? (
+          <ul className={styles.chatList}>
+            {chats.map((chat, index) => (
+              <li key={index} className={styles.chatItem} onClick={()=>{moveGroupChat(chat.roomId,chat.name)}}>
+                <div className={styles.chatAvatar}>
+                  <i className="fas fa-user-circle fa-2x"></i>
+                </div>
+                <div className={styles.chatInfo}>
+                  <div className={styles.chatName}>{'방이름 : '+chat.name}</div>
+                  <div className={styles.chatMessage}>{'참가인원 : ' + chat.members + '명'}</div>
+                </div>
+                <i className="fas fa-users"></i>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className={styles.noChats}>
+            <p>현재 생성된 그룹 채팅방이 없습니다.</p>
+            <p>새로운 그룹 채팅을 만들어보세요.</p>
+          </div>
+        )}
       </footer>
-      <FloatingActionButton />
+      <FloatingActionButton/>
     </div>
   );
 }

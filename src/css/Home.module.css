@@ -155,6 +155,39 @@
   color: #9ca3af;
 }
 
+.noChats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.noChats p {
+  margin: 0.5rem 0;
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.noChats p:first-child {
+  font-weight: bold;
+  color: #495057;
+  font-size: 1.1rem;
+}
+
+/* 추가적인 스타일 - 아이콘 추가 */
+.noChats::before {
+  content: '\f0c0'; /* FontAwesome users 아이콘 */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 3rem;
+  color: #adb5bd;
+  margin-bottom: 1rem;
+}
 
 @media (max-width: 768px) {
   .actionButtons {

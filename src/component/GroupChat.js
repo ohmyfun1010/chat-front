@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { wsGroupApi } from "../common/commonFunction";
 import Swal from "sweetalert2";
+import { FloatingActionButton } from './FloatingActionButton';
 
 export default function GroupChatRoom() {
 
@@ -81,6 +82,10 @@ export default function GroupChatRoom() {
           cancelButtonText: "취소",
           showLoaderOnConfirm: true,
           preConfirm: (result) => {
+            if (!result || result.trim() === "") {
+              Swal.showValidationMessage("닉네임을 입력해주세요."); // 에러 메시지 표시
+              return false; // 확인 버튼 동작 중단
+            }
             sessionStorage.setItem("nickname", result); // 닉네임 저장
             setNickName(result);
             if (result) {
@@ -240,6 +245,7 @@ export default function GroupChatRoom() {
           <FontAwesomeIcon icon={faPaperPlane} />
         </button>
       </div>
+      <FloatingActionButton buttomOption={5}/>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { faArrowLeft, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { callApi } from "../common/commonFunction";
 import Swal from 'sweetalert2'
+import { FloatingActionButton } from './FloatingActionButton';
 
 export default function CreateGroupChat() {
 
@@ -113,6 +114,7 @@ export default function CreateGroupChat() {
           </div>
         </div>
       </main>
+      <FloatingActionButton />
     </div>
   );
 }

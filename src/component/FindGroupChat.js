@@ -4,6 +4,7 @@ import styles from "../css/FindGroupChat.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faSearch, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { callApi } from "../common/commonFunction";
+import { FloatingActionButton } from './FloatingActionButton';
 
 export default function FindGroupChat() {
 
@@ -32,9 +33,6 @@ export default function FindGroupChat() {
       const response = await callApi(url, 'GET');
       let processedRooms = '';
       if(response){
-
-        console.log(response);
-
         processedRooms = response.map((room) => ({
           name: room.name,
           members: room.members,
@@ -89,6 +87,7 @@ export default function FindGroupChat() {
           </div>
         </div>
       </main>
+      <FloatingActionButton />
     </div>
   );
 }

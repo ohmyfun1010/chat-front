@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { faPlus, faTimes, faDownload, faHome, faCommentDots, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import styles from '../css/FloatingActionButton.module.css'
 
-export function FloatingActionButton() {
+export function FloatingActionButton({buttomOption=1}) {
 
   const [isOpen, setIsOpen] = useState(false)
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
@@ -49,7 +49,15 @@ export function FloatingActionButton() {
 
 
   return (
-    <div className={styles.fabContainer}>
+    <div style={{
+      position: 'fixed',
+      bottom: `${buttomOption}rem`,
+      right: '1rem',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      zIndex: 50,
+    }}>
       <div className={`${styles.fabActions} ${isOpen ? styles.open : ''}`}>
         {actions.map((action, index) => (
           <button
